@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
-function Login({ onLogin }) {
+function Login({ onLogin, onSwitch }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
 
     const res = await fetch("/api/users/login", {
@@ -16,35 +15,22 @@ function Login({ onLogin }) {
 
     const data = await res.json();
 
-    if (!res.ok) {
-      setError(data.message);
+    if (res.ok) {
+      localStorage.setItem("token", data.token);
+      onLogin();
     } else {
-      onLogin(data.user);
+      alert(data.message);
     }
   };
 
   return (
-    <div>
+    <form onSubmit={submit}>
       <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        /><br/><br/>
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        /><br/><br/>
-
-        <button type="submit">Login</button>
-      </form>
-    </div>
+      <input placeholder="Email" onChange={e => setEmail(e.target.value)} /><br/>
+      <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} /><br/>
+      <button>Login</button>
+      <p onClick={onSwitch} style={{cursor:"pointer"}}>New user? Register</p>
+    </form>
   );
 }
 
