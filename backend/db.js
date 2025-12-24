@@ -1,10 +1,11 @@
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  host: "db",
+  host: "db",           // Docker service name
   user: "postgres",
   password: "postgres",
-  database: "organicdb"
+  database: "organicdb",
+  port: 5432
 });
 
 module.exports = pool;
