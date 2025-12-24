@@ -14,9 +14,7 @@ function ProductList() {
       {products.map(p => (
         <div key={p.id}>
           <h4>{p.name}</h4>
-          <p>{p.description}</p>
           <p>₹{p.price}</p>
-          <hr />
         </div>
       ))}
     </div>
